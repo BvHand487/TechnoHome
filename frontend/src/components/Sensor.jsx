@@ -1,9 +1,15 @@
 import React from 'react'
 
-function Sensor({ name }) {
-  
+// 'active', 'enabled', 'functioning'
+
+function Sensor({ name, status }) {
+
     return (
-    <div>{name}</div>
+    <div>
+        {
+            
+        }
+    </div>
   )
 }
 

@@ -44,6 +44,8 @@ router.get('/', async (req, res) => {
                     records = records.map(({sensorId, time, smoke }) => ({ sensorId, time, smoke })); break;
             }
 
+        res.setHeader('Content-Type', 'application/json');
+
         return res.status(200).json(records);
     }
     catch (err) {

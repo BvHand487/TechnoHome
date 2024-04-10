@@ -9,6 +9,8 @@ router.get('/', async (req, res) => {
     try {
         const sensors = await Sensor.find({});
 
+        res.setHeader('Content-Type', 'application/json');
+
         return res.status(200).json(sensors);
     }
     catch (err) {

@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
-import Sensor from "./components/Sensor";
+import SensorList from "./components/SensorList";
+import Chart from "./components/Chart";
+import ChartContext from "./components/ChartContext";
 
 function App()
 {
-    const [ count, setCount ] = useState(0);
-
-
-
-    useEffect(() => {
-    }, [count])
-    
     return (
-        <div className="wrapper">
-            <Sidebar/>
-
+        <div>
+            <ChartContext
+                sensorId={0}
+                type={"humidity"}
+            />
         </div>
     );
 }
