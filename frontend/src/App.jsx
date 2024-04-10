@@ -1,21 +1,14 @@
-import { useEffect, useState } from "react";
-import Sensor from "./components/Sensor";
+import React from 'react';
+import list from './components/SensorList'; 
 
-function App()
-{
-    const [ count, setCount ] = useState(0);
+const App = () => {
+  const sensors = [
+    { name: 'Sensor 1', status: 'active' },
+    { name: 'Sensor 2', status: 'paused' },
+    { name: 'Sensor 3', status: 'broken' },
+  ];
 
-
-
-    useEffect(() => {
-    }, [count])
-    
-    return (
-        <div className="wrapper">
-            <Sidebar/>
-
-        </div>
-    );
-}
+  return <list sensorData={sensors} />;
+};
 
 export default App;
