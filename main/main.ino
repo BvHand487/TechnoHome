@@ -41,6 +41,7 @@ static bool lampEnabled = false;
 static int dim = 0;
 static const int id = 0;
 
+static bool firstTimeConnecting = true;
 
 void data_read()
 {
@@ -72,9 +73,26 @@ void data_print()
 void onConnectionEstablished()
 {
   Serial << "Connected to MQTT!\n";
-  
+
+  if (firstTimeConnecting)
+  {
+    client.publish("scan-res",
+      String(id) + " " +
+      String(sensorEnabled) + " " +
+      String(updateTime) + " " + 
+      String(lampEnabled) + " " +
+      String(dim));
+
+    firstTimeConnecting = false;
+  }
+
   client.subscribe("scan-req", [] (const String &payload)  {
-    client.publish("scan-res", String(id));
+    client.publish("scan-res",
+      String(id) + " " +
+      String(sensorEnabled) + " " +
+      String(updateTime) + " " + 
+      String(lampEnabled) + " " +
+      String(dim));
   });
 
 
@@ -84,9 +102,9 @@ void onConnectionEstablished()
 
     Serial << "Sensor config topic -> " << payload << '\n';
 
-    if (payload.charAt(0) == '0' || payload.charAt(0) == '1')
+    if (payload.charAt(0) == 'f' || payload.charAt(0) == 't')
     {
-      sensorEnabled = payload.charAt(0) != '0';
+      sensorEnabled = payload.charAt(0) == 't';
     }
     else
     {
@@ -107,14 +125,14 @@ void onConnectionEstablished()
 
     Serial << "Lamp config topic -> " << payload << '\n';
 
-    if ((payload.charAt(0) == '0' || payload.charAt(0) == '1') && payload.length() == 1)
+    if (payload.charAt(0) == 'f' || payload.charAt(0) == 't')
     {
-      auto val = payload.charAt(0);
+      auto val = payload.charAt(0) == 't';
 
-      if (val - '0' != lampEnabled)
+      if (val != lampEnabled)
         change = true;
 
-      lampEnabled = val != '0';
+      lampEnabled = val != 0;
     }
     else
     {
@@ -130,7 +148,7 @@ void onConnectionEstablished()
 
     if (change)
     {
-      if (lampEnabled)
+      if (lampEnabled && dim != 0)
         analogWrite(LED_TOGGLE, map(dim, 0, 100, 0, 255));
       else
         digitalWrite(LED_TOGGLE, LOW);
@@ -140,8 +158,6 @@ void onConnectionEstablished()
     {
       client.publish("lamp/config", String(id) + ' ' + payload);
     }
-
-    // Change lamp
   });
 }
 
@@ -194,9 +210,4 @@ void loop()
 
   if (sensorEnabled)
     t.handle();
-
-  // digitalWrite(LED_TOGGLE, HIGH);
-  // delay(2000);
-  // digitalWrite(LED_TOGGLE, LOW);
-  // delay(2000); 
 }
