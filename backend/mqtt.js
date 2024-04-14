@@ -243,5 +243,6 @@ module.exports.sensorConfig = (sensorId, configMsg) => {
 }
 
 module.exports.lampConfig = (lampId, configMsg) => {
+    console.log("In lamp config: " + lampId + " | " + configMsg)
     client.publish(`${config.TOPICS.lampConfig}/${lampId}`, configMsg);
 }

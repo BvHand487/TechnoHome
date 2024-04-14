@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const config = require('../config')
 const Lamp = require('../models/lamp').Lamp;
+const lampConfig = require('./../mqtt').lampConfig;
 
 
 router.get('/', async (req, res) => {
@@ -34,21 +35,17 @@ router.patch('/:id', async(req, res) => {
     try {
         console.log("In patch: " + req.params.id + " | " + req.query.enabled )
 
-        let enabled = false;
-
-        if (isNaN(req.params.id))
-            return;
-
-        if (req.query.enabled)
+        if (req.query.enabled && (req.query.enabled == '0' || req.query.enabled == '1'))
         {
-            if (req.query.enabled === '0')
-                enabled = false;
-            else if (req.query.enabled === '1')
-                enabled = true;
+            lampConfig(req.params.id, `${req.query.enabled}`);
+        }
+        else if (req.query.dim && Number.parseInt(req.query.dim) >= 0)
+        {
+            lampConfig(req.params.id, `${req.query.dim}`);
         }
 
         if (req.query.name)
-            await Lamp.updateOne({ lampId: Number.parseInt(req.params.id) }, { enabled: enabled, name: req.query.name });
+            await Lamp.updateOne({ lampId: Number.parseInt(req.params.id) }, { name: req.query.name });
 
         return res.status(200).json([]);
     }
