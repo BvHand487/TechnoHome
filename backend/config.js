@@ -26,6 +26,8 @@ module.exports.TYPES = {
 
 module.exports.SENSOR_STATUS_UDPATE = 60;  // secs
 
+module.exports.DIM_LO = 0;
+module.exports.DIM_HI = 100;
 
 module.exports.PPM_LO = 0;
 module.exports.PPM_HI = 1000;

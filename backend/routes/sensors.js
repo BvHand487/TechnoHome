@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const config = require('../config');
+const utils = require('./../utils.js');
 const Sensor = require('../models/sensor').Sensor;
 const sensorConfig = require('./../mqtt').sensorConfig;
 
@@ -34,7 +35,7 @@ router.get('/:id', async (req, res) => {
 
 router.patch('/:id', async(req, res) => {
     try {
-        if (req.query.enabled && (req.query.enabled == '0' || req.query.enabled == '1'))
+        if (req.query.enabled && (req.query.enabled == 'true' || req.query.enabled == 'false'))
         {
             sensorConfig(req.params.id, `${req.query.enabled}`);
         }

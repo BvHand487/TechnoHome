@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const config = require('../config')
+const config = require('../config');
+const utils = require('./../utils.js');
 const Lamp = require('../models/lamp').Lamp;
 const lampConfig = require('./../mqtt').lampConfig;
 
@@ -33,13 +34,11 @@ router.get('/:id', async (req, res) => {
 
 router.patch('/:id', async(req, res) => {
     try {
-        console.log("In patch: " + req.params.id + " | " + req.query.enabled )
-
-        if (req.query.enabled && (req.query.enabled == '0' || req.query.enabled == '1'))
+        if (req.query.enabled && (req.query.enabled == 'true' || req.query.enabled == 'false'))
         {
             lampConfig(req.params.id, `${req.query.enabled}`);
         }
-        else if (req.query.dim && Number.parseInt(req.query.dim) >= 0)
+        else if (req.query.dim && utils.inRange(Number.parseInt(req.query.dim), config.DIM_LO, config.DIM_HI))
         {
             lampConfig(req.params.id, `${req.query.dim}`);
         }

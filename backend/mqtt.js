@@ -2,6 +2,7 @@ const config = require('./config.js');
 const utils = require('./utils.js');
 const Record = require('./models/record.js').Record;
 const Sensor = require('./models/sensor.js').Sensor;
+const Lamp = require('./models/lamp.js').Lamp;
 
 
 function unexpectedMqtt(topic, msg) {
@@ -12,9 +13,37 @@ function unexpectedValue(topic, value) {
     console.log(`Unexpected value from sensor - topic: ${topic}, val - ${value}`);
 }
 
-async function handleSensor(sensorId)
+async function handleLamp(lampId, enabled, dim)
+{
+    const res = await Lamp.findOne({ lampId: lampId });
+
+    const newEnabled = (enabled == '1' ? true : false);
+    const newDim = (utils.inRange(Number.parseInt(dim), config.DIM_LO, config.DIM_HI) ? Number.parseInt(dim) : 0)
+
+    if (!res)
+    {
+        // If the received msg isnt in the db add it.
+        await Lamp.create({
+            lampId: lampId,
+            name: "Unnamed",
+            enabled: newEnabled,
+            dim: newDim
+        });
+    }
+
+    else
+    {
+        // Else update the already stored data about the sensor.
+        await Lamp.updateOne({ lampId: lampId }, { enabled: newEnabled, dim: newDim });
+    }
+}
+
+async function handleSensor(sensorId, enabled, updateTime)
 {
     const res = await Sensor.findOne({ sensorId: sensorId });
+
+    const newEnabled = (enabled == '1' ? true : false);
+    const newUpdate = (Number.parseInt(updateTime) >= 30) ? Number.parseInt(updateTime) : 0;
 
     if (!res)
     {
@@ -22,9 +51,9 @@ async function handleSensor(sensorId)
         await Sensor.create({
             sensorId: sensorId,
             name: "Unnamed",
-            updateTime: 60,
+            updateTime: newUpdate,
             lastUpdate: Date.now(),
-            enabled: 1,
+            enabled: newEnabled,
             lastEnabled: Date.now(),
             functioning: 1,
         });
@@ -33,21 +62,26 @@ async function handleSensor(sensorId)
     else
     {
         // Else update the already stored data about the sensor.
-        await Sensor.updateOne({ sensorId: sensorId }, { lastUpdate: Date.now(), enabled: 1, lastEnabled: Date.now(), functioning: 1 });
+        await Sensor.updateOne({ sensorId: sensorId }, { lastUpdate: Date.now(), updateTime: newUpdate, enabled: newEnabled, lastEnabled: Date.now(), functioning: 1 });
     }
 }
 
 async function handleScan(msg)
 {
     msg = msg.toString();
+    const splitted = msg.split(' ');
 
-    const sensorId = Number.parseInt(msg);
+    const sensorId = Number.parseInt(splitted[0]);
+    handleSensor(sensorId, splitted[1], splitted[2]);
 
-    handleSensor(sensorId);
+    const lampId = Number.parseInt(splitted[0]);
+    handleLamp(lampId, splitted[3], splitted[4]);
 }
 
 async function handleSensorConfig(msg)
 {
+    console.log("sensor config");
+
     msg = msg.toString()
     console.log(msg);
 
@@ -56,9 +90,9 @@ async function handleSensorConfig(msg)
     const sensorId = Number.parseInt(splitted[0]);
     msg = splitted[1];
 
-    if (msg == '0' || msg == '1')
+    if (msg == 'true' || msg == 'false')
     {
-        await Sensor.updateOne({ sensorId: sensorId }, { enabled: Number.parseInt(msg.charAt(0)) });
+        await Sensor.updateOne({ sensorId: sensorId }, { enabled: msg });
         return;
     }
 
@@ -74,24 +108,22 @@ async function handleLampConfig(msg)
     msg = msg.toString()
     console.log(msg);
 
-    // const splitted = msg.split(' ');
+    const splitted = msg.split(' ');
 
-    // const sensorId = Number.parseInt(splitted[0]);
-    // msg = splitted[1];
+    const lampId = Number.parseInt(splitted[0]);
+    msg = splitted[1];
 
-    // if (msg == '0' || msg == '1')
-    // {
-    //     await Sensor.updateOne({ sensorId: sensorId }, { enabled: Number.parseInt(msg.charAt(0)) });
-    //     return;
-    // }
+    if (msg == 'true' || msg == 'false')
+    {
+        await Lamp.updateOne({ lampId: lampId }, { enabled: msg });
+        return;
+    }
 
-    // else if (!isNaN(msg) && Number.parseInt(msg) >= 30)
-    // {
-    //     await Sensor.updateOne({ sensorId: sensorId }, { updateTime: Number.parseInt(msg) });
-    //     return;
-    // }
-
-    
+    else if (!isNaN(msg) && utils.inRange(Number.parseInt(msg), config.DIM_LO, config.DIM_HI))
+    {
+        await Lamp.updateOne({ lampId: lampId }, { dim: Number.parseInt(msg) });
+        return;
+    }
 }
 
 async function handleMessage(msg)
@@ -186,7 +218,9 @@ module.exports.init = () => {
     console.log('Connected to MQTT broker.');
 
     client.subscribe(config.TOPICS.measurement);
-    client.subscribe(config.TOPICS.config);
+    client.subscribe(config.TOPICS.scan);
+    client.subscribe(config.TOPICS.sensorConfig);
+    client.subscribe(config.TOPICS.lampConfig);
 
     client.on('connect', () => {
         client.publish('scan-req', '');
