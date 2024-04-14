@@ -10,7 +10,7 @@
 #define ALCOHOL_RSRO            1.5
 #define SMOKE_RSRO              1.8
 #define PIN_MQ135               A0
-#define LED_TOGGLE              D3
+#define LED_TOGGLE              D7
 
 
 EspMQTTClient client(
@@ -36,8 +36,10 @@ static float smoke_concentration;
 static float ppm;
 
 static int updateTime = 60;  // seconds
-static bool enabled = true;
-static const int sensorId = 0;
+static bool sensorEnabled = true;
+static bool lampEnabled = false;
+static int dim = 0;
+static const int id = 0;
 
 
 void data_read()
@@ -72,18 +74,19 @@ void onConnectionEstablished()
   Serial << "Connected to MQTT!\n";
   
   client.subscribe("scan-req", [] (const String &payload)  {
-    client.publish("scan-res", String(sensorId));
+    client.publish("scan-res", String(id));
   });
 
 
-  // config / 0|1 438
-  client.subscribe("config/0", [] (const String &payload)  {
+  // sensor/config / 0|1 438
+  // Change to sensor/config/%s, id
+  client.subscribe("sensor/config/0", [] (const String &payload)  {
 
-    Serial << "Config topic -> " << payload << '\n';
+    Serial << "Sensor config topic -> " << payload << '\n';
 
     if (payload.charAt(0) == '0' || payload.charAt(0) == '1')
     {
-      enabled = payload.charAt(0) != '0';
+      sensorEnabled = payload.charAt(0) != '0';
     }
     else
     {
@@ -92,8 +95,51 @@ void onConnectionEstablished()
     
     if (client.isConnected())
     {
-      client.publish("config", String(sensorId) + ' ' + payload);
+      client.publish("sensor/config", String(id) + ' ' + payload);
     }
+  });
+
+  // lamp/config / 0|1 0-100
+  // Change to lamp/config/%s, id
+  client.subscribe("lamp/config/0", [] (const String &payload)  {
+
+    bool change = false;
+
+    Serial << "Lamp config topic -> " << payload << '\n';
+
+    if ((payload.charAt(0) == '0' || payload.charAt(0) == '1') && payload.length() > 1)
+    {
+      auto val = payload.charAt(0);
+
+      if (val - '0' != lampEnabled)
+        change = true;
+
+      lampEnabled = val != '0';
+    }
+    else
+    {
+      auto val = atoi(payload.c_str());
+
+      if (val != dim)
+        change = true;
+
+      dim = val;
+    }
+
+    if (change)
+    {
+      if (lampEnabled)
+        analogWrite(LED_TOGGLE, map(dim, 0, 100, 0, 255));
+      else
+        digitalWrite(LED_TOGGLE, LOW);
+    }
+    
+    if (client.isConnected())
+    {
+      client.publish("lamp/config", String(id) + ' ' + payload);
+    }
+
+    // Change lamp
   });
 }
 
@@ -102,7 +148,7 @@ static String msg;
 
 void setup()
 {
-  delay(500);
+  delay(1000);
   
   Serial.begin(9600);
 
@@ -124,7 +170,7 @@ void setup()
     data_read();
     data_print();
 
-    msg = String(sensorId) + ' ' +
+    msg = String(id) + ' ' +
       String(ppm) + ' ' +
       String(temperature) + ' ' +
       String(pressure) + ' ' +
@@ -144,7 +190,7 @@ void loop()
 {
   client.loop();
 
-  if (enabled)
+  if (sensorEnabled)
     t.handle();
 
   // digitalWrite(LED_TOGGLE, HIGH);
