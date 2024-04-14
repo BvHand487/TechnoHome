@@ -1,12 +1,12 @@
 import { CircularProgress } from '@mui/material';
 import React from 'react';
 import useSWR from 'swr';
-import Sensor from './Sensor';
+import Sensor from './Bulb';
 import styles from './sensors.css';
 
 function SensorList()
 {
-    const { data, error, isLoading } = useSWR(`http://localhost:10000/api/sensors`, (uri) => fetch(uri)
+    const { data, error, isLoading } = useSWR(`http://localhost:10000/api/bulbs`, (uri) => fetch(uri)
         .then(res => res.json()));
 
     if (isLoading)

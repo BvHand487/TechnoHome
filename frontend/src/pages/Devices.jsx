@@ -2,7 +2,7 @@ import {React, useState} from 'react'
 import SensorList from '../components/sensors/SensorList';
 import { Route, Routes, useParams, Outlet } from 'react-router-dom';
 import SensorData from '../components/sensors/SensorData';
-import './../components/sensors/sensors.css';
+import styles from './../components/sensors/sensors.css';
 
 function Devices() {
 

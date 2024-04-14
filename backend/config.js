@@ -7,7 +7,8 @@ module.exports.BROKER_OPTIONS = {
 
 module.exports.TOPICS = {
     scan: 'scan-res',
-    config: 'config',
+    sensorConfig: 'sensor/config',
+    lampConfig: 'lamp/config',
     measurement: 'measurement'
 };
 

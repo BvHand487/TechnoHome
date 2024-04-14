@@ -1,5 +1,5 @@
 import { LineChart } from '@mui/x-charts'
-import React from 'react'
+import React from 'react';
 
 function Chart({ times, values })
 {

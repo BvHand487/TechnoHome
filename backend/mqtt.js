@@ -46,7 +46,7 @@ async function handleScan(msg)
     handleSensor(sensorId);
 }
 
-async function handleConfig(msg)
+async function handleSensorConfig(msg)
 {
     msg = msg.toString()
     console.log(msg);
@@ -67,6 +67,31 @@ async function handleConfig(msg)
         await Sensor.updateOne({ sensorId: sensorId }, { updateTime: Number.parseInt(msg) });
         return;
     }
+}
+
+async function handleLampConfig(msg)
+{
+    msg = msg.toString()
+    console.log(msg);
+
+    // const splitted = msg.split(' ');
+
+    // const sensorId = Number.parseInt(splitted[0]);
+    // msg = splitted[1];
+
+    // if (msg == '0' || msg == '1')
+    // {
+    //     await Sensor.updateOne({ sensorId: sensorId }, { enabled: Number.parseInt(msg.charAt(0)) });
+    //     return;
+    // }
+
+    // else if (!isNaN(msg) && Number.parseInt(msg) >= 30)
+    // {
+    //     await Sensor.updateOne({ sensorId: sensorId }, { updateTime: Number.parseInt(msg) });
+    //     return;
+    // }
+
+    
 }
 
 async function handleMessage(msg)
@@ -201,8 +226,12 @@ module.exports.init = () => {
                 handleScan(msg);
                 return;
 
-            case config.TOPICS.config:
-                handleConfig(msg);
+            case config.TOPICS.sensorConfig:
+                handleSensorConfig(msg);
+                return;
+
+            case config.TOPICS.lampConfig:
+                handleLampConfig(msg);
                 return;
         }
     });
@@ -210,5 +239,9 @@ module.exports.init = () => {
 
 
 module.exports.sensorConfig = (sensorId, configMsg) => {    
-    client.publish(`${config.TOPICS.config}/${sensorId}`, configMsg);
+    client.publish(`${config.TOPICS.sensorConfig}/${sensorId}`, configMsg);
+}
+
+module.exports.lampConfig = (lampId, configMsg) => {
+    client.publish(`${config.TOPICS.lampConfig}/${lampId}`, configMsg);
 }
