@@ -107,7 +107,7 @@ void onConnectionEstablished()
 
     Serial << "Lamp config topic -> " << payload << '\n';
 
-    if ((payload.charAt(0) == '0' || payload.charAt(0) == '1') && payload.length() > 1)
+    if ((payload.charAt(0) == '0' || payload.charAt(0) == '1') && payload.length() == 1)
     {
       auto val = payload.charAt(0);
 
@@ -125,6 +125,8 @@ void onConnectionEstablished()
 
       dim = val;
     }
+
+    Serial << "Changed: " << change << '\n';
 
     if (change)
     {
