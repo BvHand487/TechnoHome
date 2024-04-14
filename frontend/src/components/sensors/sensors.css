@@ -1,0 +1,6 @@
+.split {
+    display: flex;
+    border-color: black;
+    border: 2 2 2 2;
+    border-style: solid;
+}

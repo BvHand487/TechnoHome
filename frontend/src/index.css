@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-html, head, body {
-  margin: 0;
-  padding: 0;
-}
+html, head, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+};

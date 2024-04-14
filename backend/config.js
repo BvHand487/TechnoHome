@@ -12,7 +12,7 @@ module.exports.TOPICS = {
 };
 
 module.exports.TYPES = {
-    temp: 'temp',
+    temp: 'temperature',
     humidity: 'humidity',
     pressure: 'pressure',
     altitude: 'altitude',
