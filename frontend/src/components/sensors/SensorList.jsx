@@ -19,7 +19,7 @@ function SensorList()
     }
 
     return (
-        <div className="sensor-list">
+        <div className="flex flex-col gap-[1em] w-[40em]">
             {data.map(s => {
                 
                 let status = 'faulty';

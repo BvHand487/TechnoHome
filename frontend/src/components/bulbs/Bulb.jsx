@@ -63,16 +63,25 @@ function Bulb({ id, enabled, name, dim })
     console.log("in bulb component")
 
     return (
-            <div className="collapse collapse-arrow bg-base-200 w-96 h-36">
-                <input type="radio" name="my-accordion-2" defaultChecked /> 
-                <div className="collapse-title text-xl font-medium">
-                    {name}
-                </div>
-                <div className="collapse-content"> 
-                    <input type="checkbox" className="toggle toggle-primary" defaultChecked={enabled} onClick={toggleLamp}/>
-                    <input type="range" min={0} max={100} defaultValue={dim} className="range range-primary" onChange={changePwm}/>
+        <div className="collapse collapse-arrow bg-base-200 w-full">
+            <input type="radio" name="my-accordion-2" /> 
+            <div className="collapse-title text-xl font-medium">
+                <p>{name}</p>
+            </div>
+            <div className="collapse-content"> 
+                <div className="divider"></div>
+                <div className="flex flex-col gap-4 items-start">
+                    <div className="flex flex-row gap-4 w-full">
+                        <p>Enabled: </p>
+                        <input type="checkbox" className="toggle toggle-primary" defaultChecked={enabled} onClick={toggleLamp}/>
+                    </div>
+                    <div className="flex flex-row gap-4 w-full">
+                        <p>Strength: </p>
+                        <input type="range" min={0} max={100} defaultValue={dim} className="range range-primary" onChange={changePwm}/>
+                    </div>
                 </div>
             </div>
+        </div>
     );
 }
 

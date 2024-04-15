@@ -13,6 +13,7 @@ function SensorData()
 
     return (
         <>
+            <div className="divider divider-horizontal self-start h-full"></div>
             <div className='flex flex-col w-full h-full items-center justify-between'>
                 <div className="charts flex flex-col w-full h-full items-center justify-start gap-10">
 

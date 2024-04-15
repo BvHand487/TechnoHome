@@ -8,7 +8,10 @@
 
 .bulb-list {
     height: 100%;
-    padding: 10px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    column-gap: 2em;
 }
 
 .bulb-card {

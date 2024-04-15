@@ -15,16 +15,26 @@ function Sensor({ id, status, name })
         color = '#34eb56';
 
     return (
-        <div className="collapse collapse-arrow bg-base-200 w-96 h-36">
-            <input type="radio" name="my-accordion-2" defaultChecked /> 
+        <div className="collapse collapse-arrow bg-base-200 w-full">
+            <input type="radio" name="my-accordion-2" /> 
             <div className="collapse-title text-xl font-medium">
-                {name}
-                <GiPlainCircle color={color}/>
+                <div className="flex flex-row justify-start gap-4 relative">
+                    <p>{name}</p>
+                    <GiPlainCircle color={color} className='border-neutral border-solid border-[2px] rounded-full' size='26px'/>
+                </div>
             </div>
             <div className="collapse-content"> 
-                <Link to={`/devices/${id}`}>
-                    <button className="btn btn-primary">Show Data</button>
-                </Link>
+                <div className="divider"></div>
+                <div className='flex flex-row justify-start'>
+                    <div className='self-start'>
+                        <Link to={`/devices/${id}`}>
+                            <button className="btn btn-primary" >Show Data</button>
+                        </Link>
+                    </div>
+                    <div className='self-end'>
+                        <button className="btn btn-primary">Edit</button>
+                    </div>
+                </div>
             </div>
         </div>
     );

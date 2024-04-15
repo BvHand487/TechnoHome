@@ -19,7 +19,7 @@ function BulbList()
     }
 
     return (
-        <div className="bulb-list">
+        <div className="flex flex-col gap-[1em] w-[40em]">
             {data.map(s => {
                 return (
                     <Bulb key={s.lampId} id={s.lampId} name={s.name} enabled={s.enabled} dim={s.dim} />

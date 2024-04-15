@@ -7,9 +7,8 @@ import './../components/sensors/sensors.css';
 function Devices() {
 
     return (
-        <div className='m-[20px] flex flex-row h-full justify-center items-start'>
+        <div className='m-[20px] flex flex-row h-full justify-start items-start w-['>
             <SensorList />
-            <div className="divider divider-horizontal self-start h-full"></div>
             <Routes>
                <Route path="/:id" element={ <SensorData />} /> 
             </Routes>
