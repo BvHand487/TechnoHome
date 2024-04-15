@@ -38,7 +38,7 @@ static float ppm;
 static int updateTime = 60;  // seconds
 static bool sensorEnabled = true;
 static bool lampEnabled = false;
-static int dim = 0;
+static int dim = 50;
 static const int id = 0;
 
 static bool firstTimeConnecting = true;
