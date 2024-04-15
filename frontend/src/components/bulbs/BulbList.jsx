@@ -1,12 +1,12 @@
 import { CircularProgress } from '@mui/material';
 import React from 'react';
 import useSWR from 'swr';
-import Sensor from './Bulb';
-import styles from './sensors.css';
+import Bulb from './Bulb';
+import styles from './bulbs.css';
 
-function SensorList()
+function BulbList()
 {
-    const { data, error, isLoading } = useSWR(`http://localhost:10000/api/bulbs`, (uri) => fetch(uri)
+    const { data, error, isLoading } = useSWR(`http://localhost:10000/api/lamps`, (uri) => fetch(uri)
         .then(res => res.json()));
 
     if (isLoading)
@@ -19,27 +19,20 @@ function SensorList()
     }
 
     return (
-        <div className="sensor-list">
+        <div className="bulb-list">
             {data.map(s => {
                 
-                let status = 'faulty';
+                let status = 'off';
 
-                if (s.enabled && s.functioning)
-                    status = 'active';
-
-                else if (!s.enabled && s.functioning)
-                    status = 'paused';
-
-                else if (!s.functioning)
-                    status = 'faulty';
-
+                if (s.enabled)
+                    status = 'on';
 
                 return (
-                    <Sensor key={s.sensorId} id={s.sensorId} name={s.name} status={status} />
+                    <Bulb key={s.lampId} id={s.lampId} name={s.name} status={status} />
                 );
             })}
         </div>
     )
 }
 
-export default SensorList
+export default BulbList;

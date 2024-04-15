@@ -1,37 +1,77 @@
-import React from 'react';
+import { useState, React, useEffect } from 'react';    
 import { Card, Typography, CardActions, Button, CardContent } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { MdDevicesOther, MdOutlineBorderAll } from "react-icons/md";
-import { GiPlainCircle } from "react-icons/gi";
-import styles from './sensors.css';
+import { IoBulbOutline } from "react-icons/io5";
+import styles from './bulbs.css';
+import axios from 'axios';
 
-function Sensor({ id, status, name })
+
+function Bulb({ id, status, name })
 {
-    let color = '#000000';
+    const [enabled, setEnabled] = useState((status == 'off') ? false : true);
+    const [initialRender, setInitialRender] = useState(true);
 
-    if (status === 'faulty')
-        color = '#eb4034';
-    else if (status === 'paused')
-        color = '#ebab34';
-    else if (status === 'active')
-        color = '#34eb56';
+    const toggleLamp = () => {
+        setEnabled(!enabled);
+
+        console.log('new state -> ' + enabled)
+    }
+
+    // Send updates to lamp
+    useEffect(() => {
+        if (!initialRender)
+        {
+            const interval = setTimeout(() => {
+                console.log('sending request');
+                axios.patch(`http://localhost:10000/api/lamps/${id}?enabled=${(enabled) ? 'true' : 'false'}`);
+            }, 1000);
+
+            return () => clearTimeout(interval);
+        }
+        else
+        {
+            setInitialRender(false);
+        }
+            
+    }, [enabled]);
+
+    console.log("in bulb component")
 
     return (
-        <Link to={`/devices/${id}`}>
-            <Card className='sensor-card'>
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        <MdDevicesOther size={20}/>
-                        {name}
-                        <GiPlainCircle color={color}/>
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Button size="small">See More</Button>
-                </CardActions>
-            </Card>
-        </Link>
+            <div className="collapse collapse-arrow bg-base-200 w-96 h-36">
+                <input type="radio" name="my-accordion-2" defaultChecked /> 
+                <div className="collapse-title text-xl font-medium">
+                    {name}
+                </div>
+                <div className="collapse-content"> 
+                    <input type="checkbox" className="toggle toggle-info" defaultChecked={(status === 'off' ? false : true)} onClick={toggleLamp}/>
+                </div>
+            </div>
     );
 }
 
-export default Sensor
+export default Bulb;
+
+/*
+<Card className='bulb-card'>
+    <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+            <IoBulbOutline size={20}/>
+            {name}
+        </Typography>
+    </CardContent>
+    <CardActions>
+        <input type="checkbox" className="toggle" checked/>
+    </CardActions>
+</Card>
+
+<div className="collapse collapse-arrow bg-base-200">
+  <input type="radio" name="my-accordion-2" defaultChecked /> 
+  <div className="collapse-title text-xl font-medium">
+    Click to open this one and close others
+  </div>
+  <div className="collapse-content"> 
+    <p>hello</p>
+  </div>
+</div>
+*/

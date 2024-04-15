@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const lamps = await Sensor.find({ "lampId": req.params.id });
+        const lamps = await Lamp.find({ "lampId": req.params.id });
 
         return res.status(200).json(lamps);
     }
@@ -33,6 +33,9 @@ router.get('/:id', async (req, res) => {
 });
 
 router.patch('/:id', async(req, res) => {
+
+    console.log('received request ' + req.params.id + ' ' + req.query.enabled)
+
     try {
         if (req.query.enabled && (req.query.enabled == 'true' || req.query.enabled == 'false'))
         {

@@ -6,11 +6,11 @@
     align-items: start;
 }
 
-.sensor-list {
+.bulb-list {
     height: 100%;
     padding: 10px;
 }
 
-.sensor-card {
-    width: 250px;
+.bulb-card {
+    width: 400px;
 }

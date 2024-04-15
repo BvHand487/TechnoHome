@@ -17,8 +17,26 @@ function Sensor({ id, status, name })
         color = '#34eb56';
 
     return (
-        <Link to={`/devices/${id}`}>
-            <Card className='sensor-card'>
+        <div className="collapse collapse-arrow bg-base-200 w-full h-36">
+            <input type="radio" name="my-accordion-2" defaultChecked /> 
+            <div className="collapse-title text-xl font-medium">
+                {name}
+                <GiPlainCircle color={color}/>
+            </div>
+            <div className="collapse-content"> 
+                <Link to={`/devices/${id}`}>
+                    Hello
+                </Link>
+            </div>
+        </div>
+    );
+}
+
+export default Sensor
+
+/*
+
+<Card className='sensor-card'>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                         <MdDevicesOther size={20}/>
@@ -30,8 +48,14 @@ function Sensor({ id, status, name })
                     <Button size="small">See More</Button>
                 </CardActions>
             </Card>
-        </Link>
-    );
-}
 
-export default Sensor
+            <div className="collapse collapse-arrow bg-base-200 w-96 h-36">
+                <input type="radio" name="my-accordion-2" defaultChecked /> 
+                <div className="collapse-title text-xl font-medium">
+                    {name}
+                </div>
+                <div className="collapse-content"> 
+                    <input type="checkbox" className="toggle toggle-info" checked />
+                </div>
+            </div>
+*/

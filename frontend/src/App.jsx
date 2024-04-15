@@ -15,7 +15,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/devices/*' element={<Devices />} />
-          <Route path='/bulbs' element={<Bulbs />} />
+          <Route path='/bulbs/*' element={<Bulbs />} />
           <Route path='/settings' element={<Settings />} />
         </Routes>
       </Router>

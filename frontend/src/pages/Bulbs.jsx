@@ -1,8 +1,12 @@
 import React from 'react'
+import { Route, Routes } from 'react-router-dom';
+import BulbList from './../components/bulbs/BulbList';
 
 function Bulbs() {
   return (
-    <div>Bulbs</div>
+    <div className='split'>
+        <BulbList />
+    </div>
   )
 }
 

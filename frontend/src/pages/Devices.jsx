@@ -1,6 +1,6 @@
-import {React, useState} from 'react'
+import {React } from 'react'
 import SensorList from '../components/sensors/SensorList';
-import { Route, Routes, useParams, Outlet } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import SensorData from '../components/sensors/SensorData';
 import styles from './../components/sensors/sensors.css';
 
@@ -9,6 +9,7 @@ function Devices() {
     return (
         <div className='split'>
             <SensorList />
+            <div className="divider divider-horizontal self-start h-20"></div>
             <Routes>
                <Route path="/devices/:id" element={ <SensorData />} /> 
             </Routes>
