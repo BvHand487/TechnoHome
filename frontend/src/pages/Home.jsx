@@ -2,7 +2,7 @@ import Description from '../components/home/Description';
 import Title from '../components/home/Title';
 import Overview from '../components/home/Overview';
 import React from 'react';
-import styles from './../components/home/home.css';
+import './../components/home/home.css';
 
 function Home() {
   return (

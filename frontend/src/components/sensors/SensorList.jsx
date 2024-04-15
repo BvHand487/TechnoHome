@@ -2,7 +2,7 @@ import { CircularProgress } from '@mui/material';
 import React from 'react';
 import useSWR from 'swr';
 import Sensor from './Sensor';
-import styles from './sensors.css';
+import './sensors.css';
 
 function SensorList()
 {

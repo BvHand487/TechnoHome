@@ -1,22 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import CanvasJSReact from '@canvasjs/react-charts';
  
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
  
 class Chart2 extends Component {
-	constructor({ times, values, yTitle })
+	constructor({ times, values, yTitle, w, h })
     {
-		super({ times, values, yTitle });
+		super({ times, values, yTitle, w, h });
 	}
 	
 	render() {
 		let options = {
-            // width: 500,
-            // height: 400,
 			animationEnabled: true,
 			zoomEnabled: true,
-			theme: "light2",
+            // dynamic theme
+			theme: "dark2",
 			title:{
 				text: this.props.yTitle
 			},
@@ -29,19 +28,14 @@ class Chart2 extends Component {
 			},
 			axisY: {
 				title: "Value",
-				valueFormatString: "€##0.00",
 				crosshair: {
 					enabled: true,
 					snapToDataPoint: false,
-					labelFormatter: function(e) {
-						return "€" + CanvasJS.formatNumber(e.value, "##0.00");
-					}
 				}
 			},
 			data: [{
 				type: "area",
 				xValueFormatString: "DD MMM",
-				yValueFormatString: "€##0.00",
 				dataPoints: this.props.times.map((t, index) => ({ x: new Date(t), y: this.props.values[index] }))
 			}]
 		}
@@ -50,7 +44,7 @@ class Chart2 extends Component {
         {
             case "Humidity":
                 options.axisY.valueFormatString = "##0.00% RH";
-                options.data.forEach((d) => d.yValueFormatString = "##0.00% RH");
+                options.data.forEach((d) => d.yValueFormatString = "##0.00 RH");
                 options.axisY.crosshair.labelFormatter = function(e) {
                     return CanvasJS.formatNumber(e.value, "##0.00") + "% RH";
                 }
@@ -106,7 +100,13 @@ class Chart2 extends Component {
                 }
                 break;
         }
-		
+
+        if (this.props.w)
+            options.width = this.props.w;
+
+        if (this.props.h)
+            options.height = this.props.h;
+
 		return (
 		<div>
 			<CanvasJSChart options = {options} 

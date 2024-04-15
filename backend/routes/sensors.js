@@ -3,6 +3,7 @@ const router = express.Router();
 const config = require('../config');
 const utils = require('./../utils.js');
 const Sensor = require('../models/sensor').Sensor;
+const Record = require('../models/record').Record;
 const sensorConfig = require('./../mqtt').sensorConfig;
 
 
@@ -25,6 +26,22 @@ router.get('/:id', async (req, res) => {
         const sensors = await Sensor.find({ "sensorId": req.params.id });
 
         return res.status(200).json(sensors);
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(500).send("API wrong format.");
+    }
+});
+
+router.get('/:id/latest', async(req, res) => {
+    try {
+        const data = await Record.findOne({}, {}, { sort: { 'time' : -1 } }, function(err, entry) {
+            console.log( entry );
+          })
+
+        console.log(data);
+
+        return res.status(200).json(data);
     }
     catch (err) {
         console.log(err);

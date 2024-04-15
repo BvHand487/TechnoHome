@@ -6,24 +6,31 @@ import styles from './bulbs.css';
 import axios from 'axios';
 
 
-function Bulb({ id, status, name })
+function Bulb({ id, enabled, name, dim })
 {
-    const [enabled, setEnabled] = useState((status == 'off') ? false : true);
+    const [toggled, setToggled] = useState(enabled);
+    const [pwm, setPwm] = useState(dim)
     const [initialRender, setInitialRender] = useState(true);
 
     const toggleLamp = () => {
-        setEnabled(!enabled);
+        setToggled(!toggled);
 
-        console.log('new state -> ' + enabled)
+        console.log('new state -> ', toggled)
     }
 
-    // Send updates to lamp
+    const changePwm = (e) => {
+        setPwm(e.target.value);
+
+        console.log('new pwm -> ', e.target.value)
+    }
+
+    // Send enabled update to lamp
     useEffect(() => {
         if (!initialRender)
         {
             const interval = setTimeout(() => {
-                console.log('sending request');
-                axios.patch(`http://localhost:10000/api/lamps/${id}?enabled=${(enabled) ? 'true' : 'false'}`);
+                console.log('sending request enabled');
+                axios.patch(`http://localhost:10000/api/lamps/${id}?enabled=${(toggled) ? 'true' : 'false'}`);
             }, 1000);
 
             return () => clearTimeout(interval);
@@ -33,7 +40,25 @@ function Bulb({ id, status, name })
             setInitialRender(false);
         }
             
-    }, [enabled]);
+    }, [toggled]);
+
+    // Send dim update to lamp
+    useEffect(() => {
+        if (!initialRender)
+        {
+            const interval = setTimeout(() => {
+                console.log('sending request dim');
+                axios.patch(`http://localhost:10000/api/lamps/${id}?dim=${pwm}`);
+            }, 1000);
+
+            return () => clearTimeout(interval);
+        }
+        else
+        {
+            setInitialRender(false);
+        }
+            
+    }, [pwm]);
 
     console.log("in bulb component")
 
@@ -44,7 +69,8 @@ function Bulb({ id, status, name })
                     {name}
                 </div>
                 <div className="collapse-content"> 
-                    <input type="checkbox" className="toggle toggle-info" defaultChecked={(status === 'off' ? false : true)} onClick={toggleLamp}/>
+                    <input type="checkbox" className="toggle toggle-primary" defaultChecked={enabled} onClick={toggleLamp}/>
+                    <input type="range" min={0} max={100} defaultValue={dim} className="range range-primary" onChange={changePwm}/>
                 </div>
             </div>
     );

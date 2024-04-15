@@ -4,9 +4,16 @@ import Chart2 from './Chart2';
 import { CircularProgress } from '@mui/material';
 import useSWR from 'swr';
 
-function ChartContext({ sensorId, type, after }) {
+function ChartContext({ id, type, after, w, h }) {
 
-    const { data, error, isLoading } = useSWR(`http://localhost:10000/api/records?id=${sensorId}&type=${type}&after=${after}`, (uri) => fetch(uri)
+    let url;
+    
+    if (after != undefined)
+        url = `http://localhost:10000/api/records?id=${id}&type=${type}&after=${after}`
+    else
+        url = `http://localhost:10000/api/records?id=${id}&type=${type}`
+
+    const { data, error, isLoading } = useSWR(url, (uri) => fetch(uri)
         .then(res => res.json()));
 
     if (isLoading)
@@ -22,6 +29,8 @@ function ChartContext({ sensorId, type, after }) {
 
     return (
         <Chart2
+            w={w}
+            h={h}
             yTitle={type.charAt(0).toUpperCase() + type.slice(1)}
             times={data.map((e) => {
                 return Date.parse(e.time);

@@ -1,9 +1,7 @@
 import React from 'react';
-import { Card, Typography, CardActions, Button, CardContent } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { MdDevicesOther, MdOutlineBorderAll } from "react-icons/md";
 import { GiPlainCircle } from "react-icons/gi";
-import styles from './sensors.css';
+import './sensors.css';
 
 function Sensor({ id, status, name })
 {
@@ -17,7 +15,7 @@ function Sensor({ id, status, name })
         color = '#34eb56';
 
     return (
-        <div className="collapse collapse-arrow bg-base-200 w-full h-36">
+        <div className="collapse collapse-arrow bg-base-200 w-96 h-36">
             <input type="radio" name="my-accordion-2" defaultChecked /> 
             <div className="collapse-title text-xl font-medium">
                 {name}
@@ -25,12 +23,14 @@ function Sensor({ id, status, name })
             </div>
             <div className="collapse-content"> 
                 <Link to={`/devices/${id}`}>
-                    Hello
+                    <button className="btn btn-primary">Show Data</button>
                 </Link>
             </div>
         </div>
     );
 }
+
+//<input type="checkbox" className="toggle toggle-primary" defaultChecked={enabled} onClick={toggleLamp}/>
 
 export default Sensor
 

@@ -38,12 +38,13 @@ async function handleLamp(lampId, enabled, dim)
     }
 }
 
+
 async function handleSensor(sensorId, enabled, updateTime)
 {
     const res = await Sensor.findOne({ sensorId: sensorId });
 
-    const newEnabled = (enabled == '1' ? true : false);
-    const newUpdate = (Number.parseInt(updateTime) >= 30) ? Number.parseInt(updateTime) : 0;
+    const newEnabled = (enabled == 'true' ? true : false);
+    const newUpdate = (Number.parseInt(updateTime) >= 30) ? Number.parseInt(updateTime) : 60;
 
     if (!res)
     {

@@ -21,14 +21,8 @@ function BulbList()
     return (
         <div className="bulb-list">
             {data.map(s => {
-                
-                let status = 'off';
-
-                if (s.enabled)
-                    status = 'on';
-
                 return (
-                    <Bulb key={s.lampId} id={s.lampId} name={s.name} status={status} />
+                    <Bulb key={s.lampId} id={s.lampId} name={s.name} enabled={s.enabled} dim={s.dim} />
                 );
             })}
         </div>
