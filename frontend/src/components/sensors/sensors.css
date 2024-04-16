@@ -1,5 +1,5 @@
 .split {
-    height: 100vh;
+    height: 50vh !important;
     display: flex;
     flex-direction: row;
     justify-content: start;

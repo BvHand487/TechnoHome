@@ -1,8 +1,9 @@
 module.exports.BROKER_OPTIONS = {
-    hostname: 'localhost',
+    hostname: '192.168.56.1',
     port: 1883,
     username: 'SmartHomeConnection',
-    password: 'SmartHomePassword'
+    password: 'SmartHomePassword',
+    debug: true,
 };
 
 module.exports.TOPICS = {

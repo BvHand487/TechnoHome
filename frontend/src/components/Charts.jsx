@@ -14,14 +14,14 @@ function Charts({ id, type })
     {
         return (
             <>
-                <div className="chart h-[220px]">
-                    <ChartContext id={id} type={'smoke'} h={216}/>
+                <div className="chart h-[25vh]">
+                    <ChartContext id={id} type={'smoke'} h={window.innerHeight * 1/4 - 4}/>
                 </div>
-                <div className="chart h-[220px]">
-                    <ChartContext id={id} type={'alcohol'} h={216}/>
+                <div className="chart h-[25vh]">
+                    <ChartContext id={id} type={'alcohol'} h={window.innerHeight * 1/4 - 4}/>
                 </div>
-                <div className="chart h-[220px]">
-                    <ChartContext id={id} type={'benzene'} h={216}/>
+                <div className="chart h-[25vh]">
+                    <ChartContext id={id} type={'benzene'} h={window.innerHeight * 1/4 - 4}/>
                 </div>
             </>
         );
