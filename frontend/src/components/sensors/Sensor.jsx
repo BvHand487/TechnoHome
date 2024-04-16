@@ -14,6 +14,10 @@ function Sensor({ id, status, name })
     else if (status === 'active')
         color = '#34eb56';
 
+    const toggleSensor = () => {
+
+    }
+
     return (
         <div className="collapse collapse-arrow bg-base-200 w-full">
             <input type="radio" name="my-accordion-2" /> 
@@ -25,14 +29,20 @@ function Sensor({ id, status, name })
             </div>
             <div className="collapse-content"> 
                 <div className="divider"></div>
-                <div className='flex flex-row justify-start'>
-                    <div className='self-start'>
+                <div className='flex flex-row w-full justify-start gap-4'>
+                    <div className="flex flex-row gap-4 w-1/2">
+                        <p>Paused: </p>
+                        <input type="checkbox" className="toggle toggle-primary" defaultChecked={(status == 'faulty' || status == 'active' ? false : true)} onClick={toggleSensor}/>
+                    </div>
+                    <div className=''>
                         <Link to={`/devices/${id}`}>
                             <button className="btn btn-primary" >Show Data</button>
                         </Link>
                     </div>
-                    <div className='self-end'>
-                        <button className="btn btn-primary">Edit</button>
+                    <div className=''>
+                        <Link to={`/devices/${id}/config`}>
+                            <button className="btn btn-primary w-[97px]">Edit</button>
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -1,17 +1,30 @@
 import {React } from 'react'
 import SensorList from '../components/sensors/SensorList';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 import SensorData from '../components/sensors/SensorData';
 import './../components/sensors/sensors.css';
+import SensorEdit from '../components/sensors/SensorEdit';
+import useSWR from 'swr';
+import { CircularProgress } from '@mui/material';
+
 
 function Devices() {
 
+    const { data, error, isLoading } = useSWR(`http://localhost:10000/api/sensors`, (uri) => fetch(uri)
+        .then(res => res.json()));
+
+    if (isLoading)
+        return <CircularProgress />;
+
+    if (error)
+    {
+        console.log(error)
+        return <div>Error!</div>
+    }
+
     return (
-        <div className='m-[20px] flex flex-row h-full justify-start items-start w-['>
-            <SensorList />
-            <Routes>
-               <Route path="/:id" element={ <SensorData />} /> 
-            </Routes>
+        <div className='m-[20px] !h-[82vh]'>
+            <SensorList sensors={data}/>
         </div>
     )
 }
