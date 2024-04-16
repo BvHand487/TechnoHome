@@ -14,9 +14,9 @@
 
 
 EspMQTTClient client(
-  "f-net",
-  "frujin23",
-  "192.168.1.132",
+  "TUES",
+  "elsys-bg.org",
+  "192.168.1.52",
   "SmartHomeConnection",
   "SmartHomePassword",
   "TestClient",
