@@ -1,47 +1,45 @@
 import React, { Component, useEffect } from 'react';
 import CanvasJSReact from '@canvasjs/react-charts';
- 
+
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
- 
-class Chart2 extends Component {
-	constructor({ times, values, yTitle, w, h })
-    {
-		super({ times, values, yTitle, w, h });
-	}
-	
-	render() {
-		let options = {
-			animationEnabled: true,
-			zoomEnabled: true,
-            // dynamic theme
-			theme: "dark2",
-			title:{
-				text: this.props.yTitle
-			},
-			axisX:{
-				valueFormatString: "D MMM YYYY, HH:mm",
-				crosshair: {
-					enabled: true,
-					snapToDataPoint: false
-				}
-			},
-			axisY: {
-				title: "Value",
-				crosshair: {
-					enabled: true,
-					snapToDataPoint: false,
-				}
-			},
-			data: [{
-				type: "area",
-				xValueFormatString: "D MMM YYYY, HH:mm"  ,
-				dataPoints: this.props.times.map((t, index) => ({ x: new Date(t), y: this.props.values[index] }))
-			}]
-		}
 
-        switch (this.props.yTitle)
-        {
+class Chart2 extends Component {
+    constructor({ times, values, yTitle, w, h }) {
+        super({ times, values, yTitle, w, h });
+    }
+
+    render() {
+        let options = {
+            animationEnabled: true,
+            zoomEnabled: true,
+            // dynamic theme
+            theme: "dark2",
+            title: {
+                text: this.props.yTitle
+            },
+            axisX: {
+                valueFormatString: "D MMM YYYY, HH:mm",
+                crosshair: {
+                    enabled: true,
+                    snapToDataPoint: false
+                }
+            },
+            axisY: {
+                title: "Value",
+                crosshair: {
+                    enabled: true,
+                    snapToDataPoint: false,
+                }
+            },
+            data: [{
+                type: "area",
+                xValueFormatString: "D MMM YYYY, HH:mm",
+                dataPoints: this.props.times.map((t, index) => ({ x: new Date(t), y: this.props.values[index] }))
+            }]
+        }
+
+        switch (this.props.yTitle) {
             case "Humidity":
                 options.axisY.valueFormatString = "##0.00\'%\' RH";
                 options.data.yValueFormatString = "##0.00\'%\' RH";
@@ -91,13 +89,13 @@ class Chart2 extends Component {
         if (this.props.h)
             options.height = this.props.h;
 
-		return (
-		<div>
-			<CanvasJSChart options = {options} 
-			/>
-		</div>
-		);
-	}
+        return (
+            <div>
+                <CanvasJSChart options={options}
+                />
+            </div>
+        );
+    }
 }
- 
+
 export default Chart2;

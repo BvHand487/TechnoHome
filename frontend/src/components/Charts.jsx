@@ -5,35 +5,34 @@ import useSWR from 'swr';
 import { CircularProgress } from '@mui/material';
 
 
-function Charts({ id, type })
-{
+function Charts({ id, type }) {
     const { data, error, isLoading } = useSWR(`http://localhost:10000/api/sensors/${id}/latest`, (uri) => fetch(uri)
-            .then(res => res.json()));
+        .then(res => res.json()));
 
-    if (type == 'More')
-    {
+    if (type == 'More') {
         return (
             <>
-                <div className="chart h-[25vh]">
-                    <ChartContext id={id} type={'smoke'} h={window.innerHeight * 1/4 - 4}/>
+                <div className="chart h-[35vh] !w-[30vw]">
+                    <ChartContext id={id} type={'smoke'} h={window.innerHeight * 3.5 / 10 - 2} w={window.innerWidth * 3 / 10 - 3} />
                 </div>
-                <div className="chart h-[25vh]">
-                    <ChartContext id={id} type={'alcohol'} h={window.innerHeight * 1/4 - 4}/>
+                <div className="chart h-[35vh] !w-[30vw]">
+                    <ChartContext id={id} type={'alcohol'} h={window.innerHeight * 3.5 / 10 - 2} w={window.innerWidth * 3 / 10 - 3} />
                 </div>
-                <div className="chart h-[25vh]">
-                    <ChartContext id={id} type={'benzene'} h={window.innerHeight * 1/4 - 4}/>
+                <div className="chart h-[35vh] !w-[30vw]">
+                    <ChartContext id={id} type={'benzene'} h={window.innerHeight * 3.5 / 10 - 2} w={window.innerWidth * 3 / 10 - 3} />
+                </div>
+                <div className="chart h-[35vh] !w-[30vw]">
+                    <ChartContext id={id} type={'altitude'} h={window.innerHeight * 3.5 / 10 - 2} w={window.innerWidth * 3 / 10 - 3} />
                 </div>
             </>
         );
     }
 
-    else if (type == 'Overview')
-    {
+    else if (type == 'Overview') {
         if (isLoading)
             return <CircularProgress />;
 
-        if (error)
-        {
+        if (error) {
             console.log(error)
             return <div>Error!</div>
         }
@@ -59,15 +58,14 @@ function Charts({ id, type })
         )
     }
 
-    else
-    {
+    else {
         return (
             <div className="chart">
-                <ChartContext id={id} type={type}/>
+                <ChartContext id={id} type={type} h={window.innerHeight * 31 / 40 - 4} />
             </div>
         );
     }
-    
+
 }
 
 export default Charts

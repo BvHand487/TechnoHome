@@ -23,14 +23,12 @@
     border-width: 2px;
 }
 
-.overview-item
-{
+.overview-item {
     margin: 10px;
     font-size: 20px;
 }
 
-.overview-item-value
-{
+.overview-item-value {
     font-weight: 300px;
     @apply text-primary;
 }
