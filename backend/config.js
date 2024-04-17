@@ -1,5 +1,5 @@
 module.exports.BROKER_OPTIONS = {
-    hostname: '192.168.56.1',
+    hostname: 'localhost',  // eth: 192.168.56.1
     port: 1883,
     username: 'SmartHomeConnection',
     password: 'SmartHomePassword',

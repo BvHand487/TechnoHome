@@ -12,16 +12,15 @@ function SensorData() {
 
     return (
         <>
-            <div className="divider divider-horizontal self-start h-full"></div>
+            <div className="divider divider-horizontal self-start h-[83vh]"></div>
             <div className='flex flex-col w-full h-full items-center'>
-                <div className="charts flex flex-row flex-wrap w-full h-[77.5vh] justify-start items-center gap-6">
+                <div className="charts flex flex-row flex-wrap w-full h-[77.5vh] justify-between items-center gap-6">
 
                     <Charts id={params.id} type={type} />
 
                 </div>
 
-                <div className="join self-center m-2">
-
+                <div className="join">
                     <input className="join-item btn" type="radio" name="options" aria-label='Overview' defaultChecked
                         onClick={() => setType("Overview")} />
                     <input className="join-item btn" type="radio" name="options" aria-label='Temperature'

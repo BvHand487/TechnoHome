@@ -23,7 +23,7 @@ function Devices() {
     }
 
     return (
-        <div className='m-[20px] !h-[82vh]'>
+        <div className='m-[20px]'>
             <SensorList sensors={data}/>
         </div>
     )

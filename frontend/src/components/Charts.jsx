@@ -11,20 +11,20 @@ function Charts({ id, type }) {
 
     if (type == 'More') {
         return (
-            <>
+            <div className='grid grid-cols-2 grid-rows-2 gap-4'>
                 <div className="chart h-[35vh] !w-[30vw]">
-                    <ChartContext id={id} type={'smoke'} h={window.innerHeight * 3.5 / 10 - 2} w={window.innerWidth * 3 / 10 - 3} />
+                    <ChartContext id={id} type={'smoke'} h={window.innerHeight * 3.5 / 10 - 4} w={window.innerWidth * 3 / 10 - 4} />
                 </div>
                 <div className="chart h-[35vh] !w-[30vw]">
-                    <ChartContext id={id} type={'alcohol'} h={window.innerHeight * 3.5 / 10 - 2} w={window.innerWidth * 3 / 10 - 3} />
+                    <ChartContext id={id} type={'alcohol'} h={window.innerHeight * 3.5 / 10 - 4} w={window.innerWidth * 3 / 10 - 4} />
                 </div>
-                <div className="chart h-[35vh] !w-[30vw]">
-                    <ChartContext id={id} type={'benzene'} h={window.innerHeight * 3.5 / 10 - 2} w={window.innerWidth * 3 / 10 - 3} />
+                <div className="row-start-2 chart h-[35vh] !w-[30vw]">
+                    <ChartContext id={id} type={'benzene'} h={window.innerHeight * 3.5 / 10 - 4} w={window.innerWidth * 3 / 10 - 4} />
                 </div>
-                <div className="chart h-[35vh] !w-[30vw]">
-                    <ChartContext id={id} type={'altitude'} h={window.innerHeight * 3.5 / 10 - 2} w={window.innerWidth * 3 / 10 - 3} />
+                <div className="row-start-2 chart h-[35vh] !w-[30vw]">
+                    <ChartContext id={id} type={'altitude'} h={window.innerHeight * 3.5 / 10 - 4} w={window.innerWidth * 3 / 10 - 4} />
                 </div>
-            </>
+            </div>
         );
     }
 
@@ -40,7 +40,7 @@ function Charts({ id, type }) {
         console.log(data);
 
         return (
-            <>
+            <div className='flex flex-col items-center w-full h-full'>
                 <div className='text-5xl'>Latest Data</div>
                 <div className='text-2xl'>{new Date(data.time).toLocaleString()}</div>
                 <div className='divider'></div>
@@ -54,14 +54,14 @@ function Charts({ id, type }) {
                     <li className='overview-item'>Alcohol Concentration: <strong className='overview-item-value'>{data.alcohol} ppm</strong> </li>
                     <li className='overview-item'>Benzene Concentration: <strong className='overview-item-value'>{data.benzene} ppm</strong> </li>
                 </ul>
-            </>
+            </div>
         )
     }
 
     else {
         return (
             <div className="chart">
-                <ChartContext id={id} type={type} h={window.innerHeight * 31 / 40 - 4} />
+                <ChartContext id={id} type={type} h={window.innerHeight * 7 / 10 - 4} />
             </div>
         );
     }

@@ -33,7 +33,7 @@ async function handleLamp(lampId, enabled, dim)
 
     else
     {
-        // Else update the already stored data about the sensor.
+        // Else sync the data.
         await Lamp.updateOne({ lampId: lampId }, { enabled: newEnabled, dim: newDim });
     }
 }
@@ -43,7 +43,7 @@ async function handleSensor(sensorId, enabled, updateTime)
 {
     const res = await Sensor.findOne({ sensorId: sensorId });
 
-    const newEnabled = (enabled == 'true' ? true : false);
+    const newEnabled = (enabled == '1' ? true : false);
     const newUpdate = (Number.parseInt(updateTime) >= 30) ? Number.parseInt(updateTime) : 60;
 
     if (!res)
@@ -62,7 +62,7 @@ async function handleSensor(sensorId, enabled, updateTime)
 
     else
     {
-        // Else update the already stored data about the sensor.
+        // Else sync the data.
         await Sensor.updateOne({ sensorId: sensorId }, { lastUpdate: Date.now(), updateTime: newUpdate, enabled: newEnabled, lastEnabled: Date.now(), functioning: 1 });
     }
 }
@@ -206,8 +206,6 @@ async function handleMessage(msg)
     };
 
     await Record.create(newRecord);
-
-    handleSensor(Number(splitted[0]));
 }
 
 const mqtt = require('mqtt');

@@ -6,7 +6,7 @@ import styles from './bulbs.css';
 import axios from 'axios';
 
 
-function Bulb({ id, enabled, name, dim })
+function Bulb({ id, name, enabled, dim })
 {
     const [toggled, setToggled] = useState(enabled);
     const [pwm, setPwm] = useState(dim)
@@ -70,14 +70,19 @@ function Bulb({ id, enabled, name, dim })
             </div>
             <div className="collapse-content"> 
                 <div className="divider"></div>
-                <div className="flex flex-col gap-4 items-start">
-                    <div className="flex flex-row gap-4 w-full">
+                <div className="flex flex-col gap-4 items-start justify-start">
+                    <div className="flex flex-row gap-4">
                         <p>Enabled: </p>
                         <input type="checkbox" className="toggle toggle-primary" defaultChecked={enabled} onClick={toggleLamp}/>
                     </div>
                     <div className="flex flex-row gap-4 w-full">
                         <p>Strength: </p>
                         <input type="range" min={0} max={100} defaultValue={dim} className="range range-primary" onChange={changePwm}/>
+                    </div>
+                    <div className='self-center'>
+                        <Link to={`/bulbs/${id}/config`}>
+                            <button className="btn btn-primary w-[120px]">Edit</button>
+                        </Link>
                     </div>
                 </div>
             </div>

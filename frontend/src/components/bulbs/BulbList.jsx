@@ -1,32 +1,29 @@
 import { CircularProgress } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import useSWR from 'swr';
 import Bulb from './Bulb';
 import styles from './bulbs.css';
+import BulbEdit from './BulbEdit';
+import { Route, Routes } from 'react-router-dom';
 
-function BulbList()
+function BulbList({ bulbs })
 {
-    const { data, error, isLoading } = useSWR(`http://localhost:10000/api/lamps`, (uri) => fetch(uri)
-        .then(res => res.json()));
-
-    if (isLoading)
-        return <CircularProgress />;
-
-    if (error)
-    {
-        console.log(error)
-        return <div>Error!</div>
-    }
+    const [selected, setSelected] = useState(0);
 
     return (
-        <div className="flex flex-col gap-[1em] w-[40em]">
-            {data.map(s => {
+        <div className="flex flex-row h-full w-full">
+            {bulbs.map(b => {
                 return (
-                    <Bulb key={s.lampId} id={s.lampId} name={s.name} enabled={s.enabled} dim={s.dim} />
+                    <div className='flex flex-col gap-[1em] w-[40em]'>
+                        <Bulb key={b.lampId} id={b.lampId} name={b.name} enabled={b.enabled} dim={b.dim} />
+                    </div>
                 );
             })}
+            <Routes>
+                <Route path="/:id/config" element={ <BulbEdit bulb={bulbs.filter((b) => b.lampId == selected)}/>} /> 
+            </Routes>
         </div>
     )
 }
 
-export default BulbList;
+export default BulbList;    

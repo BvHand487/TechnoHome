@@ -34,7 +34,7 @@ router.get('/:id', async (req, res) => {
 
 router.patch('/:id', async(req, res) => {
 
-    console.log('received request ' + req.params.id + ' | ' + req.query.enabled + ' ' + req.query.dim)
+    console.log('received request ' + req.params.id + ' | ' + req.query.name)
 
     try {
         if (req.query.enabled && (req.query.enabled == 'true' || req.query.enabled == 'false'))

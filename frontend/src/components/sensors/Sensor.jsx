@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { GiPlainCircle } from "react-icons/gi";
 import './sensors.css';
+import axios from 'axios';
+
 
 function Sensor({ id, status, name })
 {
+    const [paused, setPaused] = useState((status == 'paused'));
+    const [initialRender, setInitialRender] = useState(true);
+
     let color = '#000000';
 
     if (status === 'faulty')
@@ -15,34 +20,56 @@ function Sensor({ id, status, name })
         color = '#34eb56';
 
     const toggleSensor = () => {
+        setPaused(!paused)
 
+        console.log('new paused -> ', paused)
     }
+
+    // Send paused update to sensor
+    useEffect(() => {
+        if (!initialRender)
+        {
+            const interval = setTimeout(() => {
+                console.log('sending request enabled');
+                axios.patch(`http://localhost:10000/api/sensors/${id}?enabled=${(!paused) ? 'true' : 'false'}`);
+            }, 1000);
+
+            return () => clearTimeout(interval);
+        }
+        else
+        {
+            setInitialRender(false);
+        }
+            
+    }, [paused]);
 
     return (
         <div className="collapse collapse-arrow bg-base-200 w-full">
             <input type="radio" name="my-accordion-2" /> 
             <div className="collapse-title text-xl font-medium">
                 <div className="flex flex-row justify-start gap-4 relative">
-                    <p>{name}</p>
-                    <GiPlainCircle color={color} className='border-neutral border-solid border-[2px] rounded-full' size='26px'/>
+                    <p className='w-full'>{name}</p>
+                    <GiPlainCircle color={color} className='border-neutral border-solid border-[2px] rounded-full h-full' size='30px'/>
                 </div>
             </div>
             <div className="collapse-content"> 
                 <div className="divider"></div>
-                <div className='flex flex-row w-full justify-start gap-4'>
-                    <div className="flex flex-row gap-4 w-1/2">
+                <div className='flex flex-col w-full justify-start gap-4'>
+                    <div className="flex flex-row gap-4 h-[50px] items-center">
                         <p>Paused: </p>
-                        <input type="checkbox" className="toggle toggle-primary" defaultChecked={(status == 'faulty' || status == 'active' ? false : true)} onClick={toggleSensor}/>
+                        <input type="checkbox" className="toggle toggle-primary" defaultChecked={(status != 'paused' ? false : true)} onClick={toggleSensor}/>
                     </div>
-                    <div className=''>
-                        <Link to={`/devices/${id}`}>
-                            <button className="btn btn-primary" >Show Data</button>
-                        </Link>
-                    </div>
-                    <div className=''>
-                        <Link to={`/devices/${id}/config`}>
-                            <button className="btn btn-primary w-[97px]">Edit</button>
-                        </Link>
+                    <div className='flex flex-row gap-4 justify-center'>
+                        <div className=''>
+                            <Link to={`/devices/${id}`}>
+                                <button className="btn btn-primary w-[120px]" >Show Data</button>
+                            </Link>
+                        </div>
+                        <div className=''>
+                            <Link to={`/devices/${id}/config`}>
+                                <button className="btn btn-primary w-[120px]">Edit</button>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>
