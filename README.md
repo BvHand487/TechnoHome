@@ -30,3 +30,5 @@ TechnoHome is a smart home IoT system that allows the monitoring of values like 
   <p align="center"> *A prototype of an end device (MCU and sensors)*</p>
 </p>
 
+## License
+[![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
